@@ -45,3 +45,37 @@ Upload a CSV file with patient data or use the input form to make predictions.
 """, unsafe_allow_html=True)
 
 st.sidebar.header("Made By Subhadip 😎")
+# Load and preprocess data
+@st.cache_data
+def load_data():
+    # For demo purposes, we'll create a more realistic dataset
+    np.random.seed(42)
+    n_samples = 1000
+    
+    # Create synthetic data with meaningful relationships
+    data = {
+        'Age': np.random.normal(60, 12, n_samples).astype(int),
+        'Gender': np.random.choice(['Male', 'Female'], n_samples, p=[0.6, 0.4]),
+        'Air Pollution': np.random.randint(1, 9, n_samples),
+        'Alcohol use': np.random.randint(1, 9, n_samples),
+        'Dust Allergy': np.random.randint(1, 9, n_samples),
+        'OccuPational Hazards': np.random.randint(1, 9, n_samples),
+        'Genetic Risk': np.random.randint(1, 9, n_samples),
+        'chronic Lung Disease': np.random.randint(1, 9, n_samples),
+        'Balanced Diet': np.random.randint(1, 9, n_samples),
+        'Obesity': np.random.randint(1, 9, n_samples),
+        'Smoking': np.random.randint(1, 9, n_samples),
+        'Passive Smoker': np.random.randint(1, 9, n_samples),
+        'Chest Pain': np.random.randint(1, 9, n_samples),
+        'Coughing of Blood': np.random.randint(1, 9, n_samples),
+        'Fatigue': np.random.randint(1, 9, n_samples),
+        'Weight Loss': np.random.randint(1, 9, n_samples),
+        'Shortness of Breath': np.random.randint(1, 9, n_samples),
+        'Wheezing': np.random.randint(1, 9, n_samples),
+        'Swallowing Difficulty': np.random.randint(1, 9, n_samples),
+        'Clubbing of Finger Nails': np.random.randint(1, 9, n_samples),
+        'Frequent Cold': np.random.randint(1, 9, n_samples),
+        'Dry Cough': np.random.randint(1, 9, n_samples),
+        'Snoring': np.random.randint(1, 9, n_samples),
+    }
+    
