@@ -413,7 +413,89 @@ def main():
                 if 'Chest Pain' in selected_features:
                     input_data['Chest Pain'] = st.slider("Chest Pain (1-8)", 1, 8, 4)
         
+        # Convert to DataFrame
+        input_df = pd.DataFrame([input_data])
         
+        # Encode categorical variables
+        if 'Gender' in input_df.columns:
+            input_df['Gender'] = LabelEncoder().fit_transform(input_df['Gender'])
+        
+        # Ensure we have all the selected features
+        for feature in selected_features:
+            if feature not in input_df.columns:
+                input_df[feature] = 4  # Default value
+        
+        # Reorder columns to match training data
+        input_df = input_df[selected_features]
+        
+        # Make prediction
+        if st.button("Predict Risk Level"):
+            model = st.session_state.model
+            scaler = st.session_state.scaler
+            
+            # Scale input data
+            input_scaled = scaler.transform(input_df)
+            
+            prediction = model.predict(input_scaled)
+            prediction_proba = model.predict_proba(input_scaled)
+            
+            risk_levels = ['Low', 'Medium', 'High']
+            risk_level = risk_levels[prediction[0]]
+            confidence = np.max(prediction_proba) * 100
+            
+            st.markdown("### Prediction Result")
+            
+            if risk_level == "High":
+                st.markdown(f'<div class="prediction-high">'
+                           f'<h3>High Risk of Lung Cancer</h3>'
+                           f'<p>Confidence: {confidence:.2f}%</p>'
+                           f'<p>Please consult a healthcare professional for further evaluation.</p>'
+                           f'</div>', unsafe_allow_html=True)
+            elif risk_level == "Medium":
+                st.markdown(f'<div class="prediction-medium">'
+                           f'<h3>Medium Risk of Lung Cancer</h3>'
+                           f'<p>Confidence: {confidence:.2f}%</p>'
+                           f'<p>Consider lifestyle changes and regular health check-ups.</p>'
+                           f'</div>', unsafe_allow_html=True)
+            else:
+                st.markdown(f'<div class="prediction-low">'
+                           f'<h3>Low Risk of Lung Cancer</h3>'
+                           f'<p>Confidence: {confidence:.2f}%</p>'
+                           f'<p>Continue maintaining healthy habits and regular check-ups.</p>'
+                           f'</div>', unsafe_allow_html=True)
+            
+            # Show probability distribution
+            st.write("### Risk Probability Distribution")
+            prob_df = pd.DataFrame({
+                'Risk Level': risk_levels,
+                'Probability': prediction_proba[0] * 100
+            })
+            
+            fig = px.bar(prob_df, x='Risk Level', y='Probability', 
+                        title='Probability for Each Risk Level', text='Probability')
+            fig.update_traces(texttemplate='%{text:.2f}%', textposition='outside')
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Show contributing factors
+            st.write("### Top Contributing Factors")
+            if hasattr(model, 'feature_importances_'):
+                # For tree-based models
+                feature_importance = pd.DataFrame({
+                    'Feature': selected_features,
+                    'Importance': model.feature_importances_
+                }).sort_values('Importance', ascending=False)
+                
+                # Get values for top features
+                top_features = feature_importance.head(5)
+                top_features['Value'] = top_features['Feature'].apply(lambda x: input_data.get(x, 'N/A'))
+                
+                st.table(top_features[['Feature', 'Value', 'Importance']])
+            else:
+                # For linear models like SVM
+                st.info("Feature importance is not available for the selected model type.")
+
+if __name__ == "__main__":
+    main()
     
         
 
