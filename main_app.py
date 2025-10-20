@@ -30,7 +30,7 @@ st.markdown("""
     .info-text {font-size: 1.1rem; line-height: 1.6;}
     .prediction-high {background-color: #fccc; padding: 20px; border-radius: 10px; border: 1px solid #ff0000;}
     .prediction-medium {background-color: #fff4; padding: 20px; border-radius: 10px; border: 1px solid #ffcc00;}
-    .prediction-low {background-color: #4CAF50; padding: 20px; border-radius: 10px; border: 1px solid #00ff00;}
+    .prediction-low {background-color: #4CAF; padding: 20px; border-radius: 10px; border: 1px solid #00ff00;}
     .feature-importance {background-color: #f0f; padding: 15px; border-radius: 10px;}
     .stButton>button {background-color: #4CAF50; color: white; font-weight: bold;}
 </style>
