@@ -244,7 +244,21 @@ def main():
             gender_counts = df['Gender'].value_counts()
             fig = px.pie(values=gender_counts.values, names=gender_counts.index, title='Gender Distribution')
             st.plotly_chart(fig, use_container_width=True)
-        
+        with col2:
+            # Risk level distribution
+            if 'Level' in df.columns:
+                level_counts = df['Level'].value_counts()
+                fig = px.bar(x=level_counts.index, y=level_counts.values, 
+                            title='Risk Level Distribution', labels={'x': 'Risk Level', 'y': 'Count'})
+                st.plotly_chart(fig, use_container_width=True)
+            
+            # Correlation heatmap
+            numeric_df = df.select_dtypes(include=[np.number])
+            if not numeric_df.empty:
+                corr = numeric_df.corr()
+                fig = px.imshow(corr, title='Correlation Heatmap')
+                st.plotly_chart(fig, use_container_width=True)
+    
         
         
 
