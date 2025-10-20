@@ -13,7 +13,7 @@
 
 ## 📋 **Table of Contents**
 - ✨ [Features](#-features)
-- 🎥 [Demo](#-demo)
+- 🎥 [Live Demo](#-demo)
 - 🛠 [Installation](#-installation)
 - 🚀 [Usage](#-usage)
 - 📁 [Project Structure](#-project-structure)
