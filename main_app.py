@@ -78,4 +78,24 @@ def load_data():
         'Dry Cough': np.random.randint(1, 9, n_samples),
         'Snoring': np.random.randint(1, 9, n_samples),
     }
+    df = pd.DataFrame(data)
+    
+    # Create a more realistic target variable with meaningful relationships
+    # High risk factors: Smoking, Genetic Risk, Air Pollution, Age, Coughing of Blood
+    risk_score = (
+        df['Smoking'] * 0.3 + 
+        df['Genetic Risk'] * 0.25 + 
+        df['Air Pollution'] * 0.15 +
+        df['Coughing of Blood'] * 0.2 +
+        (df['Age'] > 60) * 2 +
+        np.random.normal(0, 1, n_samples)
+    )
+    
+    # Convert to categories
+    df['Level'] = pd.cut(risk_score, 
+                         bins=[-10, 2, 4, 10], 
+                         labels=['Low', 'Medium', 'High'])
+    
+    return df
+
     
