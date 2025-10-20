@@ -188,3 +188,33 @@ def train_model(X, y, model_type='random_forest'):
     
     return best_model, accuracy, cm, scaler, X_train.columns
 
+# Main app
+def main():
+    # Sidebar for navigation
+    st.sidebar.title("Navigation")
+    app_mode = st.sidebar.selectbox("Choose a page", 
+                                   ["Home", "Data Overview", "Feature Selection", "Model Training", "Prediction"])
+    
+    # Load data
+    df = load_data()
+    
+    if app_mode == "Home":
+        st.markdown('<p class="sub-header">About This App</p>', unsafe_allow_html=True)
+        st.markdown("""
+        <p class="info-text">
+        This application uses machine learning models to predict the risk level of lung cancer 
+        based on various health and lifestyle factors. The model is trained on patient data including:
+        </p>
+        <ul class="info-text">
+            <li>Demographic information (Age, Gender)</li>
+            <li>Environmental factors (Air Pollution, Dust Allergy, Occupational Hazards)</li>
+            <li>Lifestyle factors (Alcohol use, Smoking, Balanced Diet, Obesity)</li>
+            <li>Genetic risk factors</li>
+            <li>Health symptoms (Chest Pain, Coughing of Blood, Shortness of Breath, etc.)</li>
+        </ul>
+        <p class="info-text">
+        Use the navigation menu to explore the data, select important features, train the model, and make predictions.
+        </p>
+        """, unsafe_allow_html=True)
+        
+
