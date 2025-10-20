@@ -297,6 +297,61 @@ def main():
             
         else:
             st.error("Target variable 'Level' not found in the dataset.")
+
+    elif app_mode == "Model Training":
+        st.markdown('<p class="sub-header">Model Training</p>', unsafe_allow_html=True)
+        
+        if 'selected_features' not in st.session_state:
+            st.warning("Please perform feature selection first in the 'Feature Selection' section.")
+            return
+        
+        X = st.session_state.X
+        y = st.session_state.y
+        
+        # Model selection
+        model_type = st.selectbox("Select Model", 
+                                 ["random_forest", "gradient_boosting", "svm"])
+        
+        # Train model
+        if st.button("Train Model"):
+            with st.spinner("Training model (this may take a few minutes)..."):
+                model, accuracy, cm, scaler, feature_names = train_model(X, y, model_type=model_type)
+            
+            st.success(f"Model trained successfully with accuracy: {accuracy:.2%}")
+            
+            # Display confusion matrix
+            st.write("### Confusion Matrix")
+            fig = px.imshow(cm, text_auto=True, 
+                           labels=dict(x="Predicted", y="Actual", color="Count"),
+                           x=['Low', 'Medium', 'High'], y=['Low', 'Medium', 'High'])
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Feature importance for tree-based models
+            if hasattr(model, 'feature_importances_'):
+                st.write("### Feature Importance")
+                feature_importance = pd.DataFrame({
+                    'feature': feature_names,
+                    'importance': model.feature_importances_
+                }).sort_values('importance', ascending=False)
+                
+                fig = px.bar(feature_importance, x='importance', y='feature', 
+                            title='Feature Importance', orientation='h')
+                st.plotly_chart(fig, use_container_width=True)
+            
+            # Save model to session state
+            st.session_state.model = model
+            st.session_state.scaler = scaler
+            st.session_state.feature_names = feature_names
+            
+            # Show classification report
+            st.write("### Classification Report")
+            X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.2, stratify=y)
+            X_test_scaled = scaler.transform(X_test)
+            y_pred = model.predict(X_test_scaled)
+            
+            report = classification_report(y_test, y_pred, target_names=['Low', 'Medium', 'High'], output_dict=True)
+            report_df = pd.DataFrame(report).transpose()
+            st.dataframe(report_df)
     
         
 
