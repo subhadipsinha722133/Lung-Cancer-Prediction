@@ -216,5 +216,25 @@ def main():
         Use the navigation menu to explore the data, select important features, train the model, and make predictions.
         </p>
         """, unsafe_allow_html=True)
+        # Show sample data
+        if st.checkbox("Show sample data"):
+            st.dataframe(df.head())
+    
+    elif app_mode == "Data Overview":
+        st.markdown('<p class="sub-header">Data Overview</p>', unsafe_allow_html=True)
+        
+        # Data preview
+        st.write("### Dataset Preview")
+        st.dataframe(df.head())
+        
+        # Basic statistics
+        st.write("### Basic Statistics")
+        st.write(df.describe())
+        
+        # Data visualization
+        st.write("### Data Visualization")
+        
+        col1, col2 = st.columns(2)
+        
         
 
