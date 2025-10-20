@@ -352,6 +352,23 @@ def main():
             report = classification_report(y_test, y_pred, target_names=['Low', 'Medium', 'High'], output_dict=True)
             report_df = pd.DataFrame(report).transpose()
             st.dataframe(report_df)
+    elif app_mode == "Prediction":
+        st.markdown('<p class="sub-header">Make Predictions</p>', unsafe_allow_html=True)
+        
+        # Check if model is trained
+        if 'model' not in st.session_state:
+            st.warning("Please train the model first in the 'Model Training' section.")
+            return
+        
+        # Create input form with only selected features
+        st.write("### Enter Patient Information")
+        
+        # Get selected features
+        selected_features = st.session_state.get('selected_features', [])
+        
+        # Organize inputs into columns
+        col1, col2, col3 = st.columns(3)
+        input_data = {}
     
         
 
