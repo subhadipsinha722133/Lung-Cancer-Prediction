@@ -125,5 +125,11 @@ def preprocess_data(df, target='Level'):
     
     return df, le_target, target_mapping
 
+# Function for feature selection
+def select_features(X, y, k=10):
+    selector = SelectKBest(score_func=f_classif, k=min(k, X.shape[1]))
+    selector.fit(X, y)
+    selected_features = X.columns[selector.get_support()]
+    return selected_features, selector.scores_
 
     
