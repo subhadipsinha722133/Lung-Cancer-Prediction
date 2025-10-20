@@ -235,6 +235,16 @@ def main():
         st.write("### Data Visualization")
         
         col1, col2 = st.columns(2)
+        with col1:
+            # Age distribution
+            fig = px.histogram(df, x='Age', title='Age Distribution', nbins=20)
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Gender distribution
+            gender_counts = df['Gender'].value_counts()
+            fig = px.pie(values=gender_counts.values, names=gender_counts.index, title='Gender Distribution')
+            st.plotly_chart(fig, use_container_width=True)
+        
         
         
 
