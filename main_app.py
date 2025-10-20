@@ -369,6 +369,51 @@ def main():
         # Organize inputs into columns
         col1, col2, col3 = st.columns(3)
         input_data = {}
+        # Age and Gender are always included
+        with col1:
+            input_data['Age'] = st.slider("Age", 20, 80, 50)
+            input_data['Gender'] = st.selectbox("Gender", ["Male", "Female"])
+            
+        with col2:
+            if 'Air Pollution' in selected_features:
+                input_data['Air Pollution'] = st.slider("Air Pollution (1-8)", 1, 8, 4)
+            if 'Alcohol use' in selected_features:
+                input_data['Alcohol use'] = st.slider("Alcohol Use (1-8)", 1, 8, 4)
+            if 'Smoking' in selected_features:
+                input_data['Smoking'] = st.slider("Smoking (1-8)", 1, 8, 4)
+                
+        with col3:
+            if 'Genetic Risk' in selected_features:
+                input_data['Genetic Risk'] = st.slider("Genetic Risk (1-8)", 1, 8, 4)
+            if 'Coughing of Blood' in selected_features:
+                input_data['Coughing of Blood'] = st.slider("Coughing of Blood (1-8)", 1, 8, 4)
+            if 'chronic Lung Disease' in selected_features:
+                input_data['chronic Lung Disease'] = st.slider("Chronic Lung Disease (1-8)", 1, 8, 4)
+        
+        # Additional inputs for other features
+        if len(selected_features) > 7:
+            st.write("### Additional Factors")
+            col4, col5, col6 = st.columns(3)
+            
+            with col4:
+                if 'Dust Allergy' in selected_features:
+                    input_data['Dust Allergy'] = st.slider("Dust Allergy (1-8)", 1, 8, 4)
+                if 'OccuPational Hazards' in selected_features:
+                    input_data['OccuPational Hazards'] = st.slider("Occupational Hazards (1-8)", 1, 8, 4)
+                    
+            with col5:
+                if 'Balanced Diet' in selected_features:
+                    input_data['Balanced Diet'] = st.slider("Balanced Diet (1-8)", 1, 8, 4)
+                if 'Obesity' in selected_features:
+                    input_data['Obesity'] = st.slider("Obesity (1-8)", 1, 8, 4)
+                    
+            with col6:
+                if 'Passive Smoker' in selected_features:
+                    input_data['Passive Smoker'] = st.slider("Passive Smoker (1-8)", 1, 8, 4)
+                if 'Chest Pain' in selected_features:
+                    input_data['Chest Pain'] = st.slider("Chest Pain (1-8)", 1, 8, 4)
+        
+        
     
         
 
