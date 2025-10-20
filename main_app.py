@@ -132,4 +132,59 @@ def select_features(X, y, k=10):
     selected_features = X.columns[selector.get_support()]
     return selected_features, selector.scores_
 
+# Function to train model with hyperparameter tuning
+def train_model(X, y, model_type='random_forest'):
+    # Split data
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42, test_size=0.2, stratify=y)
     
+    # Scale features
+    scaler = StandardScaler()
+    X_train_scaled = scaler.fit_transform(X_train)
+    X_test_scaled = scaler.transform(X_test)
+    
+    if model_type == 'random_forest':
+        # Hyperparameter tuning for Random Forest
+        param_grid = {
+            'n_estimators': [100, 200],
+            'max_depth': [None, 10, 20],
+            'min_samples_split': [2, 5],
+            'min_samples_leaf': [1, 2]
+        }
+        model = RandomForestClassifier(random_state=42)
+        grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+        grid_search.fit(X_train_scaled, y_train)
+        best_model = grid_search.best_estimator_
+        
+    elif model_type == 'gradient_boosting':
+        # Hyperparameter tuning for Gradient Boosting
+        param_grid = {
+            'n_estimators': [100, 200],
+            'learning_rate': [0.05, 0.1],
+            'max_depth': [3, 5],
+            'subsample': [0.8, 1.0]
+        }
+        model = GradientBoostingClassifier(random_state=42)
+        grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+        grid_search.fit(X_train_scaled, y_train)
+        best_model = grid_search.best_estimator_
+        
+    elif model_type == 'svm':
+        # Hyperparameter tuning for SVM
+        param_grid = {
+            'C': [0.1, 1, 10],
+            'gamma': ['scale', 'auto'],
+            'kernel': ['rbf', 'linear']
+        }
+        model = SVC(probability=True, random_state=42)
+        grid_search = GridSearchCV(model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+        grid_search.fit(X_train_scaled, y_train)
+        best_model = grid_search.best_estimator_
+    
+    # Evaluate model
+    y_pred = best_model.predict(X_test_scaled)
+    y_pred_proba = best_model.predict_proba(X_test_scaled)
+    accuracy = accuracy_score(y_test, y_pred)
+    cm = confusion_matrix(y_test, y_pred)
+    
+    return best_model, accuracy, cm, scaler, X_train.columns
+
