@@ -39,7 +39,7 @@
 ---
 
 ## 🎥 **Live Demo**
-🔗 **Demo:** [Click here to explore the deployed app](#)  
+🔗 **Demo:** [Click here to explore the deployed app](https://lung-cancer-prediction-um7e43hxcjgkamuspjkcp8.streamlit.app/)  
 
 ---
 
