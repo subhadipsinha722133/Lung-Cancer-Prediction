@@ -35,3 +35,13 @@ st.markdown("""
     .stButton>button {background-color: #4CAF50; color: white; font-weight: bold;}
 </style>
 """, unsafe_allow_html=True)
+# App title and description
+st.markdown('<p class="main-header"><h1>🫁 Lung Cancer Prediction App</h1></p>', unsafe_allow_html=True)
+st.markdown("""
+<p class="info-text">
+This application predicts the likelihood of lung cancer based on patient health data and lifestyle factors.
+Upload a CSV file with patient data or use the input form to make predictions.
+</p>
+""", unsafe_allow_html=True)
+
+st.sidebar.header("Made By Subhadip 😎")
