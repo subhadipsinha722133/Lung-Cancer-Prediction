@@ -258,7 +258,45 @@ def main():
                 corr = numeric_df.corr()
                 fig = px.imshow(corr, title='Correlation Heatmap')
                 st.plotly_chart(fig, use_container_width=True)
+
     
+    elif app_mode == "Feature Selection":
+        st.markdown('<p class="sub-header">Feature Selection</p>', unsafe_allow_html=True)
         
+        # Preprocess data
+        processed_df, le_target, target_mapping = preprocess_data(df)
+        
+        if 'Level' in processed_df.columns:
+            X = processed_df.drop('Level', axis=1)
+            y = processed_df['Level']
+            
+            # Feature selection
+            k = st.slider("Number of features to select", 5, 20, 10)
+            selected_features, feature_scores = select_features(X, y, k=k)
+            
+            st.write(f"### Top {k} Selected Features")
+            
+            # Create feature importance dataframe
+            feature_importance_df = pd.DataFrame({
+                'Feature': X.columns,
+                'Importance Score': feature_scores
+            }).sort_values('Importance Score', ascending=False)
+            
+            # Display top features
+            st.dataframe(feature_importance_df.head(k))
+            
+            # Plot feature importance
+            fig = px.bar(feature_importance_df.head(k), x='Importance Score', y='Feature', 
+                        title='Feature Importance Scores', orientation='h')
+            st.plotly_chart(fig, use_container_width=True)
+            
+            # Save selected features to session state
+            st.session_state.selected_features = selected_features
+            st.session_state.X = X[selected_features]
+            st.session_state.y = y
+            
+        else:
+            st.error("Target variable 'Level' not found in the dataset.")
+    
         
 
