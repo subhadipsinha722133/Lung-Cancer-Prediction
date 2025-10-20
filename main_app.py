@@ -97,5 +97,33 @@ def load_data():
                          labels=['Low', 'Medium', 'High'])
     
     return df
+# Function to preprocess data
+def preprocess_data(df, target='Level'):
+    df = df.copy()
+    
+    # Drop unnecessary columns if they exist
+    cols_to_drop = ["index", "Patient Id"]
+    for col in cols_to_drop:
+        if col in df.columns:
+            df.drop(columns=[col], inplace=True)
+    
+    # Encode categorical variables
+    categorical_cols = df.select_dtypes(include=['object']).columns
+    for col in categorical_cols:
+        if col != target:
+            le = LabelEncoder()
+            df[col] = le.fit_transform(df[col])
+    
+    # Encode target variable
+    if target in df.columns:
+        le_target = LabelEncoder()
+        df[target] = le_target.fit_transform(df[target])
+        target_mapping = {i: label for i, label in enumerate(le_target.classes_)}
+    else:
+        le_target = None
+        target_mapping = None
+    
+    return df, le_target, target_mapping
+
 
     
