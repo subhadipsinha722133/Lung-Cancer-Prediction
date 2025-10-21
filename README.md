@@ -1,5 +1,3 @@
-
-
 # 🫁 **Lung Cancer Prediction Web App**  
 > 🌐 A Streamlit-based machine learning web application that predicts lung cancer risk levels using patient health and lifestyle data — with stunning visuals and intelligent insights.
 
